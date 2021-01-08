@@ -1,41 +1,6 @@
-# monitoring-todolist
+# todolist-config
 
-Modification of todolist app for use as a microservice in bachelor thesis "Monitoring Microservices in the Cloud".
-
-original app: https://github.com/Well5a/vertsys-todolist
-
-## Changes
-
-* uses PostgreSQL database instead of MySQL
-* updated to latest Spring Boot release (currently 2.1.3)
-* changed server port to 5555
-* implemented monitoring tool chain with micrometer, prometheus and grafana
-* implemented InspectIT Ocelot for metric collection and exposure
-* added Kubernetes config files
-* added azure scripts to create azure resources and deploy the application
-* pushed app to Dockerhub
-
-## Build the app
-
-```
-mvn clean install
-```
-
-## App usage (mappings)
-
-* localhost:5555/ui for list of todos
-* `curl -X POST localhost:5555/task` to add a task to the list
-* `curl -X DELETE localhost:5555/id` to delete a task from the list
-
-## Start the app with Docker-Compose
-
-Run `docker-compose up` in root directory to start the app.
-
-This will automatically pull the images from Dockerhub, you can find the todolist app [here](https://hub.docker.com/r/well5a/todolist).
-You can also get the image...
-
-* locally: Build the app, then the image with `docker build -t todolist .` in project root directory
-* or by pulling it manually from Dockerhub: `docker pull well5a/todolist`
+Kubernetes deployment configuration files for https://github.com/Well5a/todolist
 
 ## Metrics Monitoring
 
