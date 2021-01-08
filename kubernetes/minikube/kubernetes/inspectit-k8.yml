@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: todo-agent-claim
+  namespace: todo-application
+spec:
+  storageClassName: standard       # minikube: standard | azure: default
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-inspectit
+  namespace: todo-application
+  labels:
+    app: todo-inspectit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-inspectit
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: todo-inspectit
+    spec:
+      containers:
+        - name: todo-inspectit
+          image: inspectit/inspectit-ocelot-agent:latest
+          resources: {}
+          volumeMounts:
+            - name: todo-agent-volume
+              mountPath: /agent
+      restartPolicy: Always
+      volumes:
+        - name: todo-agent-volume
+          persistentVolumeClaim:
+            claimName: todo-agent-claim
+status: {}

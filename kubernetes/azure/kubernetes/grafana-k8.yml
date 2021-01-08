@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources-conf
+  namespace: todo-application
+  labels:
+    name: grafana-datasources-conf
+data:
+  datasources.yml: |-
+    apiVersion: 1
+
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      orgId: 1
+      url: http://prometheus-service:9090
+      jsonData:
+        timeInterval: "15s"
+      secureJsonData:
+        tlsCACert: "..."
+        tlsClientCert: "..."
+        tlsClientKey: "..."
+      version: 1
+      editable: true
+    - name: PostgreSQL
+      type: postgres
+      access: proxy
+      url: todo-service:5432
+      database: tododb
+      user: todo
+      secureJsonData:
+        password: todo
+      jsonData:
+        sslmode: "disable"
+        postgresVersion: 903
+      editable: true
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: grafana-deployment
+  namespace: todo-application
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:latest
+          env:
+            - name: GF_PATHS_PROVISIONING
+              value: /usr/share/grafana/custom/
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: todo
+            - name: GF_SECURITY_ADMIN_USER
+              value: admin
+            - name: GF_INSTALL_PLUGINS
+              value: https://github.com/NovatecConsulting/novatec-service-dependency-graph-panel/releases/download/v0.2/novatec-service-dependency-graph-panel.zip;novatec-servicegraph-panel
+          ports:
+            - containerPort: 3000
+          resources: {}
+          volumeMounts:
+            - name: grafana-dashboards-volume
+              mountPath: /usr/share/grafana/custom/dashboards
+            - name: grafana-datasources-volume
+              mountPath: /usr/share/grafana/custom/datasources
+      restartPolicy: Always
+      volumes:
+        - name: grafana-dashboards-volume
+          azureFile:
+            secretName: todo-grafana-secret
+            shareName: monitoring-share
+            readOnly: false
+        - name: grafana-datasources-volume
+          configMap:
+            defaultMode: 420
+            name: grafana-datasources-conf
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+  namespace: todo-application
+  labels:
+    app: grafana
+spec:
+  type: LoadBalancer
+  selector:
+    app: grafana
+  ports:
+    - name: "grafana"
+      port: 3000
+      targetPort: 3000
+status:
+  loadBalancer: {}

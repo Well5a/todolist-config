@@ -1,0 +1,17 @@
+# Eclipse
+.settings/
+.classpath
+.project
+
+# IntelliJ IDEA
+.idea
+*.iml
+
+# inspectit jar
+agent/*.jar
+
+# Grafana Plugins
+grafana/plugins/*
+
+# Branch switching
+generated/
