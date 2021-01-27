@@ -81,7 +81,7 @@ spec:
       volumes:
         - name: grafana-dashboards-volume
           hostPath:   # hardcoded path
-            path: /grafana/provisioning/dashboards
+            path: ../grafana/provisioning/dashboards
             type: Directory
         - name: grafana-datasources-volume
           configMap:
