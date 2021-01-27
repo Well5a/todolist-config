@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inspectit-conf
+  namespace: todo-application
+  labels:
+    name: inspectit-conf
+data:
+  inspectit-http-config.yml : |-
+    inspectit:
+      metrics:
+        definitions:
+          '[http/in/responsetime]':
+            unit: ms
+            description: "http response times for incoming requests"
+            views:
+              '[http/in]':
+                aggregation: HISTOGRAM
+                bucket-boundaries: [3, 10, 50, 100]
+                tags: {http_path: true, http_status: true, http_method: true, origin_service: true, application: true}
+              # '[http/in/count]':
+              #   aggregation: COUNT
+              #   tags: {http_path: true, http_status: true, http_method: true, origin_service: true, application: true}
+              # '[http/in/responsetime/sum]':
+              #   aggregation: SUM
+              #   tags: {http_path: true, http_status: true, http_method: true, origin_service: true, application: true}
+                
+          '[http/out/responsetime]':
+            unit: ms
+            description: "http response times for outgoing requests"
+            views:
+              '[http/out]':
+                aggregation: HISTOGRAM
+                bucket-boundaries: [3, 10, 50, 100]
+                tags: {http_host: true, http_path: true, http_status: true, http_method: true, target_service: true, application: true}
+              # '[http/out/count]':
+              #   aggregation: COUNT
+              #   tags: {http_host: true, http_path: true, http_status: true, http_method: true, target_service: true, application: true}
+              # '[http/out/responsetime/sum]':
+              #   aggregation: SUM
+              #   tags: {http_host: true, http_path: true, http_status: true, http_method: true, target_service: true, application: true}
