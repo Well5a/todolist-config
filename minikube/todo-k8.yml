@@ -147,7 +147,7 @@ spec:
     - name: "application"
       port: 5555
       targetPort: 5555
-      nodePort: 31555
+      nodePort: 31551
     - name: "inspectit"
       port: 8888
       targetPort: 8888
