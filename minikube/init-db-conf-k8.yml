@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: init-db-conf
-  namespace: todo-application
+  namespace: todo-application-f1
   labels:
     name: init-db-conf
 data:

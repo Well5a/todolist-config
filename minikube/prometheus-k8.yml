@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: prometheus
-  namespace: todo-application
+  namespace: todo-application-f1
 rules:
   - apiGroups: [""]
     resources:
@@ -24,7 +24,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: prometheus
-  namespace: todo-application
+  namespace: todo-application-f1
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -38,7 +38,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: prometheus-server-conf
-  namespace: todo-application
+  namespace: todo-application-f1
   labels:
     name: prometheus-server-conf
 data:
@@ -168,7 +168,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus-deployment
-  namespace: todo-application
+  namespace: todo-application-f1
 spec:
   replicas: 1  
   selector:
@@ -204,7 +204,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: prometheus-service
-  namespace: todo-application
+  namespace: todo-application-f1
 spec:
   type: LoadBalancer
   selector:
