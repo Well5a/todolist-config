@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: inspectit-conf
-  namespace: todo-application-f1
+  namespace: todo-application-f2
   labels:
     name: inspectit-conf
 data:
